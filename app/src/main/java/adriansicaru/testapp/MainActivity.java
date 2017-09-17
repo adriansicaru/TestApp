@@ -2,10 +2,15 @@ package adriansicaru.testapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -14,14 +19,16 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
 import adriansicaru.testapp.JSONObjects.randomUsers.RandomUsers;
+import adriansicaru.testapp.JSONObjects.randomUsers.Result;
 import adriansicaru.testapp.networking.ServerClient;
 import adriansicaru.testapp.networking.ServerInterface;
+import adriansicaru.testapp.userDetails.UserDetailsActivity;
 import adriansicaru.testapp.userList.UserListAdapter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
     ProgressBar progressBar;
     TextView errorTextView;
@@ -38,6 +45,7 @@ public class MainActivity extends Activity {
     UserListAdapter userListAdapter;
     View footerView;
     Call<JsonElement> call;
+    Toolbar mToolbar;
 
 
     @Override
@@ -45,6 +53,14 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity_layout);
         mContext = this;
+
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        if(mToolbar!=null) {
+            setSupportActionBar(mToolbar);
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
+            getSupportActionBar().setTitle("Users");
+            getSupportActionBar().setTitle(Html.fromHtml("<font color=\"#FFFFFF\">" + "Users" + "</font>"));
+        }
 
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         errorTextView = (TextView) findViewById(R.id.error_text);
@@ -71,6 +87,17 @@ public class MainActivity extends Activity {
             userListAdapter = new UserListAdapter(mContext, R.layout.user_list_item_layout, randomUsers.getResults());
             userListView.setAdapter(userListAdapter);
             progressBar.setVisibility(View.GONE);
+            userListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Result bundleResult = randomUsers.getResults().get(i);
+                    Intent intent = new Intent(mContext, UserDetailsActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("bundleResult", bundleResult);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
+            });
         } else {
             userListView.removeFooterView(footerView);
             userListAdapter.addAll(gson.fromJson(response.body(), RandomUsers.class).getResults());

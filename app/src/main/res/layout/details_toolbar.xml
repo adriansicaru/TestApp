@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
     android:minHeight="?android:attr/actionBarSize"
-    android:background="@android:color/holo_red_dark"
+    android:background="@android:color/holo_blue_light"
     tools:ignore="Overdraw">
 
 </android.support.v7.widget.Toolbar>
