@@ -23,6 +23,9 @@
         <activity android:name=".userDetails.UserDetailsActivity">
         </activity>
 
+        <activity android:name=".userDetails.BigPhotoActivity">
+        </activity>
+
     </application>
 
 </manifest>
