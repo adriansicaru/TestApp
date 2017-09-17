@@ -20,7 +20,7 @@ public class Location implements Parcelable
     private String state;
     @SerializedName("postcode")
     @Expose
-    private Integer postcode;
+    private String postcode;
     public final static Parcelable.Creator<Location> CREATOR = new Creator<Location>() {
 
 
@@ -32,7 +32,7 @@ public class Location implements Parcelable
             instance.street = ((String) in.readValue((String.class.getClassLoader())));
             instance.city = ((String) in.readValue((String.class.getClassLoader())));
             instance.state = ((String) in.readValue((String.class.getClassLoader())));
-            instance.postcode = ((Integer) in.readValue((Integer.class.getClassLoader())));
+            instance.postcode = ((String) in.readValue((Integer.class.getClassLoader())));
             return instance;
         }
 
@@ -57,7 +57,7 @@ public class Location implements Parcelable
      * @param postcode
      * @param city
      */
-    public Location(String street, String city, String state, Integer postcode) {
+    public Location(String street, String city, String state, String postcode) {
         super();
         this.street = street;
         this.city = city;
@@ -89,11 +89,11 @@ public class Location implements Parcelable
         this.state = state;
     }
 
-    public Integer getPostcode() {
+    public String getPostcode() {
         return postcode;
     }
 
-    public void setPostcode(Integer postcode) {
+    public void setPostcode(String postcode) {
         this.postcode = postcode;
     }
 

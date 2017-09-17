@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -13,6 +14,7 @@ import com.google.gson.JsonElement;
 import adriansicaru.testapp.JSONObjects.randomUsers.RandomUsers;
 import adriansicaru.testapp.networking.ServerClient;
 import adriansicaru.testapp.networking.ServerInterface;
+import adriansicaru.testapp.userList.UserListAdapter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,6 +30,8 @@ public class MainActivity extends Activity {
     final int result = 100;
     final String seed = "abc";
     RandomUsers randomUsers;
+    ListView userListView;
+    UserListAdapter userListAdapter;
 
 
     @Override
@@ -38,6 +42,7 @@ public class MainActivity extends Activity {
 
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         errorTextView = (TextView) findViewById(R.id.error_text);
+        userListView = (ListView) findViewById(R.id.userList);
         errorTextView.setVisibility(View.GONE);
 
         apiService = ServerClient.getClient(serverName).create(ServerInterface.class);
@@ -51,7 +56,9 @@ public class MainActivity extends Activity {
                 if (response.code() == 200) {
                     Gson gson = new Gson();
                     randomUsers = gson.fromJson(response.body(), RandomUsers.class);
-                    setErrorMessage(randomUsers.getResults().get(0).getEmail());
+                    userListAdapter = new UserListAdapter(mContext, R.layout.user_list_item_layout, randomUsers.getResults());
+                    userListView.setAdapter(userListAdapter);
+                    progressBar.setVisibility(View.GONE);
                 } else {
                    setErrorMessage(response.message());
                 }

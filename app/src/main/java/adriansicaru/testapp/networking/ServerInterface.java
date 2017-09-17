@@ -17,7 +17,7 @@ public interface ServerInterface {
 
     @GET("/api/")
     Call<JsonElement> randomUsers(@Query("page") Integer page,
-                                  @Query("result") Integer result,
+                                  @Query("results") Integer result,
                                   @Query("seed") String seed,
                                   @Header("accept") String accept,
                                   @Header("content-type") String contentType);
