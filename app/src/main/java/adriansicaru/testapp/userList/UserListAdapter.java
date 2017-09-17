@@ -11,7 +11,11 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import adriansicaru.testapp.JSONObjects.randomUsers.Result;
 import adriansicaru.testapp.R;
@@ -49,9 +53,18 @@ public class UserListAdapter extends ArrayAdapter<Result> {
         holder = new Holder();
 
         holder.userIcon = (ImageView) row.findViewById(R.id.user_icon);
+        holder.name = (TextView) row.findViewById(R.id.name_text);
+        holder.age = (TextView) row.findViewById(R.id.age_text);
+        holder.flagIcon = (ImageView) row.findViewById(R.id.flag_image);
         row.setTag(holder);
 
-        Picasso.with(context).load(result.getPicture().getThumbnail()).transform(new CircleTransformation()).into(holder.userIcon);
+        holder.name.setText(result.getName().getFirst()+" "+result.getName().getLast());
+        holder.age.setText(getAge(result.getDob())+" years");
+
+        Picasso.with(context).load("https://flagpedia.net/data/flags/mini/"+result.getNat()
+                .toLowerCase(Locale.US)+".png").placeholder(R.drawable.flag_placeholder).into(holder.flagIcon);
+        Picasso.with(context).load(result.getPicture().getThumbnail())
+                .transform(new CircleTransformation()).placeholder(R.drawable.user_placeholder).into(holder.userIcon);
 
         return row;
     }
@@ -63,6 +76,31 @@ public class UserListAdapter extends ArrayAdapter<Result> {
         TextView age;
         ImageView flagIcon;
 
+    }
+
+
+    private String getAge(String dob){
+
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+        try {
+            cal.setTime(sdf.parse(dob));
+        } catch (ParseException e) {
+
+        }
+
+        Calendar today = Calendar.getInstance();
+
+        int age = today.get(Calendar.YEAR) - cal.get(Calendar.YEAR);
+
+        if (today.get(Calendar.DAY_OF_YEAR) < cal.get(Calendar.DAY_OF_YEAR)){
+            age--;
+        }
+
+        Integer ageInt = new Integer(age);
+        String ageS = ageInt.toString();
+
+        return ageS;
     }
 
 }

@@ -6,7 +6,12 @@
     android:layout_height="match_parent"
     tools:context="adriansicaru.testapp.MainActivity">
 
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/home_toolbar" />
+
     <RelativeLayout
+        android:layout_below="@+id/toolbar"
         android:id="@+id/list_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Test App</string>
+    <string name="users">Users</string>
 </resources>
