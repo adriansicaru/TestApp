@@ -128,7 +128,7 @@ public class UserDetailsActivity extends AppCompatActivity {
             }
         });
 
-
+        resetZoom();
 
         headerContainer.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -159,8 +159,9 @@ public class UserDetailsActivity extends AppCompatActivity {
                         float curScale = distCurrent / dist0;
                         if (curScale > 1) {
                             Intent intent = new Intent(mContext, BigPhotoActivity.class);
+                            intent.putExtra("photoUrl",result.getPicture().getLarge());
                             startActivity(intent);
-                        };
+                        }
                         resetZoom();
                         break;
                     case MotionEvent.ACTION_POINTER_UP:
