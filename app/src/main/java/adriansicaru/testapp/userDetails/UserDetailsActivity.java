@@ -92,6 +92,7 @@ public class UserDetailsActivity extends AppCompatActivity {
         addressCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //gerate intent for navigation apps
                 Uri gmmIntentUri = Uri.parse("geo:0,0?q=" +Uri.encode(result.getLocation().getState()+"+"
                         +result.getLocation().getCity()+"+"+result.getLocation().getStreet()+"+"
                         +result.getLocation().getPostcode()));
@@ -107,6 +108,7 @@ public class UserDetailsActivity extends AppCompatActivity {
         phoneCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //staring the dialer
                 String uri = "tel:" + result.getPhone() ;
                 Intent intent = new Intent(Intent.ACTION_DIAL);
                 intent.setData(Uri.parse(uri));
@@ -117,6 +119,7 @@ public class UserDetailsActivity extends AppCompatActivity {
         emailCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //gereating intent for mail type apps
                 String uriText =
                         "mailto:" + result.getEmail();
 
@@ -130,6 +133,8 @@ public class UserDetailsActivity extends AppCompatActivity {
 
         resetZoom();
 
+        //we detect multi touch and measure the distance between fingers at the end of the gesture.
+        //if the distance increases from the initial one it is a pinch to zoom in, else a pinch to zoom out
         headerContainer.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -174,10 +179,13 @@ public class UserDetailsActivity extends AppCompatActivity {
 
     }
 
+    //utility purposes, logging the zoom level
     private void logZoom() {
         float curScale = distCurrent / dist0;
         Log.e("ZOOM",curScale+"");
     }
+
+    //resets zoom level to default parameters on release
     private void resetZoom() {
         distCurrent = 1;
         dist0 = 1;

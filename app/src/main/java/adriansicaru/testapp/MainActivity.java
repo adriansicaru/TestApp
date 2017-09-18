@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //in case something goes wrong with the download
     private void setErrorMessage(String errorMessage) {
         errorTextView.setText(errorMessage);
         progressBar.setVisibility(View.GONE);
@@ -82,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void handleRequestResponse(Response<JsonElement> response) {
         Gson gson = new Gson();
+        //if this is the first time the list is populated, we set an adapter, if not, we only update it
+        //if we reach a certain position in our list, we can start loading more data (pages)
         if(currentPage==0) {
             randomUsers = gson.fromJson(response.body(), RandomUsers.class);
             userListAdapter = new UserListAdapter(mContext, R.layout.user_list_item_layout, randomUsers.getResults());
@@ -115,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
                                      int totalItemCount) {
                     int position = firstVisibleItem + visibleItemCount;
+                    //lazyLoadPos stores how many positions before we should start loading the next page
                     int limit = totalItemCount - lazyLoadPos;
 
                     // Check if bottom has been reached
@@ -130,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //send request to server with our page
     private void makeApiCall(Integer page) {
         call = apiService.randomUsers(page, result, seed, "application/json", "application/json");
 
